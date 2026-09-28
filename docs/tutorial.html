@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guia de Autenticação Bitrix24 · Tiqtech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e3a;
+    --bg-2: #0d1250;
+    --card: #141a5c;
+    --border: #2a2f7e;
+    --text: #eef0fb;
+    --muted: #a3a9d6;
+    --accent: #1fcdff;
+    --accent-soft: rgba(31, 205, 255, .14);
+    --indigo: #1c1890;
+    --blue: #245efe;
+    --bitrix: #2fd68a;
+    --bitrix-soft: rgba(47, 214, 138, .14);
+    --warn: #f5a524;
+    --warn-soft: rgba(245, 165, 36, .12);
+    --code-bg: #080a30;
+    --brand-gradient: linear-gradient(118deg, var(--indigo) 0%, var(--blue) 58%, var(--accent) 100%);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(60% 45% at 85% 0%, rgba(36, 94, 254, .20) 0%, rgba(0,0,0,0) 70%),
+      radial-gradient(45% 35% at 5% 100%, rgba(31, 205, 255, .12) 0%, rgba(0,0,0,0) 70%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: "Sora", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  a { color: var(--accent); }
+
+  header.top {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(10,12,55,.85); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  header.top .logo-mark {
+    width: 22px; height: 26px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  header.top .logo-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  header.top strong {
+    font-weight: 700; letter-spacing: .3px; font-size: 14px;
+    background: var(--brand-gradient);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  header.top .sep { color: var(--muted); font-weight: 400; margin: 0 2px; }
+  header.top .proj { color: var(--muted); font-weight: 500; font-size: 13px; letter-spacing: .2px; }
+
+  .layout { display: flex; max-width: 1120px; margin: 0 auto; padding: 32px 24px 96px; gap: 40px; }
+  nav.toc {
+    width: 230px; flex-shrink: 0; position: sticky; top: 76px; align-self: flex-start;
+    font-size: 13px;
+  }
+  nav.toc a { display: block; color: var(--muted); text-decoration: none; padding: 6px 0; border-left: 2px solid transparent; padding-left: 10px; font-weight: 500; transition: color .15s, border-color .15s; }
+  nav.toc a:hover { color: var(--text); border-left-color: var(--accent); }
+  main { flex: 1; min-width: 0; }
+
+  h1 { font-size: 28px; margin: 0 0 8px; font-weight: 800; letter-spacing: -.2px; }
+  p.lead { color: var(--muted); font-size: 15px; margin: 0 0 8px; max-width: 680px; }
+
+  .legenda { display: flex; gap: 16px; flex-wrap: wrap; margin: 20px 0 40px; font-size: 12.5px; }
+  .legenda .item { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+  .legenda .amostra { font-family: monospace; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+
+  section { margin-bottom: 60px; scroll-margin-top: 80px; }
+  section h2 { font-size: 20px; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-weight: 700; letter-spacing: -.1px; }
+  section > p.desc { color: var(--muted); font-size: 14px; margin: 0 0 24px; max-width: 700px; }
+
+  .badge {
+    font-family: monospace; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px;
+    white-space: nowrap; letter-spacing: .3px;
+  }
+  .badge.api { background: var(--accent-soft); color: #7fe4ff; }
+  .badge.bitrix { background: var(--bitrix-soft); color: #7bf0bb; }
+  .badge.metodo { background: var(--code-bg); color: var(--muted); border: 1px solid var(--border); }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 10px 30px -12px rgba(0,0,10,.5); }
+
+  ol.steps { list-style: none; counter-reset: passo; margin: 0; padding: 0; }
+  ol.steps > li {
+    counter-increment: passo;
+    position: relative;
+    padding: 0 0 26px 40px;
+    border-left: 2px solid var(--border);
+    margin-left: 13px;
+  }
+  ol.steps > li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  ol.steps > li::before {
+    content: counter(passo);
+    position: absolute; left: -13px; top: 0;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--brand-gradient); color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 3px var(--bg-2);
+  }
+  ol.steps h3 { margin: 0 0 6px; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 700; }
+  ol.steps p { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
+  ol.steps p:last-child { margin-bottom: 0; }
+
+  code, pre { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; }
+  code.inline {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px;
+    color: #9fd8ff;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; overflow-x: auto; color: #cfe0ff; margin: 8px 0 0;
+  }
+  pre .url-bitrix { color: #7bf0bb; }
+  pre .url-api { color: #7fe4ff; }
+  pre .placeholder { color: var(--warn); }
+
+  .urlbox {
+    display: flex; align-items: flex-start; gap: 10px; margin: 8px 0 0;
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px;
+  }
+  .urlbox code { flex: 1; word-break: break-all; color: #cfe0ff; }
+
+  table.ref { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.ref th, table.ref td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  table.ref th { color: var(--muted); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .3px; }
+  table.ref td.rota { font-family: monospace; }
+
+  .aviso {
+    background: var(--warn-soft); border: 1px solid var(--warn); border-radius: 10px;
+    padding: 12px 16px; font-size: 13px; color: var(--text); display: flex; gap: 10px; align-items: flex-start;
+  }
+  .aviso .icone { flex-shrink: 0; }
+
+  footer.page { color: var(--muted); font-size: 12px; text-align: center; padding: 24px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 800px) {
+    .layout { flex-direction: column; }
+    nav.toc { position: static; width: auto; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="logo-mark" aria-hidden="true">
+    <img src="data:image/png;base64,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" alt="" />
+  </span>
+  <strong>Tiqtech</strong><span class="sep">·</span><span class="proj">auth-examples-bitrix24</span>
+</header>
+
+<div class="layout">
+  <nav class="toc">
+    <a href="#intro">Visão geral</a>
+    <a href="#webhook">1. Webhook de entrada fixo</a>
+    <a href="#contexto">2. Contexto automático</a>
+    <a href="#oauth2">3. OAuth2 completo</a>
+    <a href="#referencia">Referência das rotas</a>
+  </nav>
+
+  <main>
+    <h1 id="intro">Guia de autenticação com o Bitrix24</h1>
+    <p class="lead">
+      As três formas de autenticar/chamar a API do Bitrix24, com o passo a passo real —
+      do cadastro no portal até o recebimento dos tokens.
+    </p>
+    <p class="lead">
+      Em todo exemplo de URL, uma tag indica se ela é do <strong>Bitrix24</strong> (você acessa
+      o domínio do próprio portal ou da conta OAuth do Bitrix) ou da <strong>nossa API</strong>
+      (o servidor Fastify deste projeto, rodando em <code class="inline">http://localhost:3000</code>
+      ou na sua URL pública/túnel).
+    </p>
+
+    <div class="legenda">
+      <div class="item"><span class="amostra" style="background:var(--bitrix-soft); color:#7bf0bb;">BITRIX24</span> URL real do portal ou da conta OAuth do Bitrix24</div>
+      <div class="item"><span class="amostra" style="background:var(--accent-soft); color:#7fe4ff;">SUA API</span> URL do servidor deste projeto (Fastify)</div>
+    </div>
+
+    <!-- ===================== 1. WEBHOOK FIXO ===================== -->
+    <section id="webhook">
+      <h2>1. Webhook de entrada fixo <span class="badge bitrix">BITRIX24</span></h2>
+      <p class="desc">
+        A forma mais simples de chamar a API REST do Bitrix24: uma URL fixa, com um token
+        embutido, gerada direto no painel do portal. Não envolve nosso servidor em nada — é uma
+        chamada direta do seu script/curl para o Bitrix24. Ideal para integrações internas,
+        scripts pontuais e automações que rodam sempre dentro do mesmo portal.
+      </p>
+
+      <div class="card">
+        <ol class="steps">
+          <li>
+            <h3>Abra o painel de Webhooks no seu portal</h3>
+            <p>No menu do Bitrix24: <em>Aplicativos → clique em "Webhooks" (ou em "Recursos para desenvolvedores → Outro → Webhook de entrada", dependendo da versão do portal)</em>.</p>
+          </li>
+          <li>
+            <h3>Clique em "Adicionar webhook" → "Webhook de entrada"</h3>
+            <p>
+              Selecione os escopos (permissões) que o webhook vai poder usar — por exemplo
+              <code class="inline">crm</code> para métodos de CRM, ou <code class="inline">user</code>
+              para dados de usuário. Marque só o que for realmente necessário.
+            </p>
+          </li>
+          <li>
+            <h3>Copie a URL gerada</h3>
+            <p>O Bitrix24 mostra uma URL no formato:</p>
+            <div class="urlbox">
+              <code>https://<span class="placeholder">SEU-PORTAL</span>.bitrix24.com.br/rest/<span class="placeholder">ID_DO_USUARIO</span>/<span class="placeholder">CHAVE_DO_WEBHOOK</span>/</code>
+            </div>
+            <p>Essa chave já <strong>é</strong> a autenticação — qualquer requisição pra essa URL é tratada como autenticada com as permissões escolhidas no passo 2.</p>
+          </li>
+          <li>
+            <h3>Chame um método da API anexando o nome dele</h3>
+            <p>Teste real (lista os dados do usuário atual, exige só o escopo básico):</p>
+            <pre>curl "https://<span class="placeholder">SEU-PORTAL</span>.bitrix24.com.br/rest/<span class="placeholder">ID_DO_USUARIO</span>/<span class="placeholder">CHAVE_DO_WEBHOOK</span>/user.current.json"</pre>
+            <p>Outro exemplo, listando leads do CRM (exige escopo <code class="inline">crm</code>):</p>
+            <pre>curl "https://<span class="placeholder">SEU-PORTAL</span>.bitrix24.com.br/rest/<span class="placeholder">ID_DO_USUARIO</span>/<span class="placeholder">CHAVE_DO_WEBHOOK</span>/crm.lead.list.json?select[]=ID&select[]=TITLE"</pre>
+          </li>
+        </ol>
+      </div>
+
+      <div class="aviso">
+        <span class="icone">⚠️</span>
+        <span>
+          A URL do webhook <strong>é</strong> a credencial — quem tiver essa URL consegue chamar a API com
+          as permissões escolhidas. Nunca commite ela em repositório público, nunca exponha em
+          código client-side (frontend). Se vazar, revogue e gere uma nova no mesmo painel.
+          Diferente dos fluxos 2 e 3, essa URL não expira e não tem refresh — por isso não precisa
+          de cache/banco de dados para gerenciar token.
+        </span>
+      </div>
+    </section>
+
+    <!-- ===================== 2. CONTEXTO AUTOMÁTICO ===================== -->
+    <section id="contexto">
+      <h2>2. Contexto automático <span class="badge api">app dentro do portal</span></h2>
+      <p class="desc">
+        Usado quando o app roda <strong>dentro</strong> do Bitrix24 (num iframe). O próprio
+        portal injeta os tokens a cada carregamento, chamando o handler cadastrado com um
+        <code class="inline">POST</code> — sem tela de login, sem redirecionamento manual.
+      </p>
+
+      <div class="card">
+        <ol class="steps">
+          <li>
+            <h3>Suba seu servidor com uma URL pública <span class="badge api">SUA API</span></h3>
+            <p>
+              O Bitrix24 precisa alcançar seu servidor pela internet. Rode <code class="inline">npm start</code>
+              (o projeto sobe em <code class="inline">http://localhost:3000</code>) e exponha a porta com um túnel,
+              por exemplo <code class="inline">ngrok http 3000</code> ou o Port Forwarding do VS Code.
+            </p>
+          </li>
+          <li>
+            <h3>Cadastre o app local <span class="badge bitrix">BITRIX24</span></h3>
+            <p>No portal: <em>Desenvolvedores → Outro → Adicionar aplicativo local</em>. Em <strong>"Caminho de instalação (handler)"</strong>, informe:</p>
+            <div class="urlbox"><code><span class="url-api">https://<span class="placeholder">sua-url-publica</span>/install</span></code></div>
+            <p>Essa é a rota <code class="inline">POST /install</code> deste projeto — o Bitrix24 vai chamá-la sozinho.</p>
+          </li>
+          <li>
+            <h3>Instale/abra o app dentro do portal <span class="badge bitrix">BITRIX24</span></h3>
+            <p>
+              Ao instalar (e a cada vez que o app for aberto dentro do painel do Bitrix24), o portal faz
+              automaticamente um <code class="inline">POST</code> pro handler, com o corpo contendo, entre outros:
+            </p>
+            <pre>AUTH_ID=&lt;access_token&gt;
+AUTH_EXPIRES=3600
+REFRESH_ID=&lt;refresh_token&gt;
+member_id=&lt;id do portal&gt;
+DOMAIN=<span class="placeholder">seu-portal</span>.bitrix24.com.br</pre>
+          </li>
+          <li>
+            <h3>Receba e visualize os tokens <span class="badge api">SUA API</span></h3>
+            <p>
+              A rota <code class="inline">POST /install</code> deste projeto (<code class="inline">src/app.js</code>) loga
+              tudo no console e devolve um HTML com o que chegou. Pra simular sem o Bitrix24:
+            </p>
+            <pre>curl -X POST https://<span class="placeholder">sua-url-publica</span>/install \
+  -d "AUTH_ID=<span class="placeholder">token_de_teste</span>" \
+  -d "REFRESH_ID=<span class="placeholder">refresh_de_teste</span>" \
+  -d "member_id=<span class="placeholder">abc123</span>"</pre>
+          </li>
+          <li>
+            <h3>⚠️ Guarde o token — não confie só no contexto do iframe</h3>
+            <p>
+              O <code class="inline">AUTH_ID</code> (access token) expira em <code class="inline">AUTH_EXPIRES</code>
+              segundos (normalmente 3600 = 1 hora). Ele só chega de novo automaticamente quando o app é
+              reaberto dentro do portal — então, se seu backend precisa chamar a API do Bitrix24 fora
+              desse momento (fila, cron job, webhook assíncrono, processamento em background), você
+              <strong>precisa persistir</strong> <code class="inline">AUTH_ID</code>, <code class="inline">REFRESH_ID</code>
+              e <code class="inline">member_id</code> num banco de dados ou cache (Redis, por exemplo),
+              associados ao <code class="inline">member_id</code> (identifica o portal de forma única).
+            </p>
+            <p>Quando o access_token expirar, renove chamando o endpoint real de refresh do Bitrix24:</p>
+            <div class="urlbox">
+              <code>
+                <span class="url-bitrix">https://oauth.bitrix.info/oauth/token/</span>?grant_type=refresh_token&client_id=<span class="placeholder">SEU_CLIENT_ID</span>&client_secret=<span class="placeholder">SEU_CLIENT_SECRET</span>&refresh_token=<span class="placeholder">REFRESH_ID_SALVO</span>
+              </code>
+            </div>
+            <p>A resposta traz um novo par <code class="inline">access_token</code>/<code class="inline">refresh_token</code> — salve os dois de novo, substituindo os antigos.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== 3. OAUTH2 COMPLETO ===================== -->
+    <section id="oauth2">
+      <h2>3. OAuth2 completo <span class="badge api">app fora do portal</span></h2>
+      <p class="desc">
+        Usado quando o app é acessado <strong>fora</strong> do Bitrix24. Segue o protocolo OAuth2
+        "Authorization Code": o usuário autoriza numa tela do próprio Bitrix24 e seu servidor troca
+        um código por tokens.
+      </p>
+
+      <div class="card">
+        <ol class="steps">
+          <li>
+            <h3>Tenha client_id e client_secret <span class="badge bitrix">BITRIX24</span></h3>
+            <p>
+              Use o mesmo app cadastrado em <em>Desenvolvedores → Outro → Adicionar aplicativo local</em>
+              (fluxo 2) — ele já tem um <code class="inline">client_id</code> (formato
+              <code class="inline">local.xxxxxxxxx.xxxxxxxx</code>) e um <code class="inline">client_secret</code>
+              visíveis na tela de configuração do app.
+            </p>
+          </li>
+          <li>
+            <h3>Configure o redirect_uri <span class="badge api">SUA API</span></h3>
+            <p>No mesmo cadastro do app, defina a URL de redirecionamento exatamente como:</p>
+            <div class="urlbox"><code><span class="url-api">https://<span class="placeholder">sua-url-publica</span>/oauth/callback</span></code></div>
+            <p>
+              Precisa ser <strong>idêntica</strong>, caractere por caractere, à que você vai usar no passo 3 — o
+              Bitrix24 recusa a autorização se não bater.
+            </p>
+          </li>
+          <li>
+            <h3>Preencha o <code class="inline">.env</code> <span class="badge api">SUA API</span></h3>
+            <pre>BITRIX_CLIENT_ID=<span class="placeholder">local.xxxxxxxxx.xxxxxxxx</span>
+BITRIX_CLIENT_SECRET=<span class="placeholder">seu_client_secret</span>
+BITRIX_PORTAL_DOMAIN=<span class="placeholder">seu-portal</span>.bitrix24.com.br
+BITRIX_REDIRECT_URI=https://<span class="placeholder">sua-url-publica</span>/oauth/callback</pre>
+          </li>
+          <li>
+            <h3>Abra a URL de autorização</h3>
+            <p>Com <code class="inline">npm start</code> rodando, abra no navegador o atalho deste projeto:</p>
+            <div class="urlbox"><code><span class="url-api">https://<span class="placeholder">sua-url-publica</span>/oauth/authorize</span></code> <span class="badge api">SUA API</span></div>
+            <p>
+              Essa rota só monta a URL real do Bitrix24 (usando as variáveis do <code class="inline">.env</code>) e
+              redireciona você pra lá. A URL real por trás dela é:
+            </p>
+            <div class="urlbox">
+              <code>
+                <span class="url-bitrix">https://<span class="placeholder">seu-portal</span>.bitrix24.com.br/oauth/authorize/</span>?client_id=<span class="placeholder">SEU_CLIENT_ID</span>&response_type=code&redirect_uri=<span class="placeholder">https://sua-url-publica/oauth/callback</span>
+              </code>
+              <span class="badge bitrix">BITRIX24</span>
+            </div>
+          </li>
+          <li>
+            <h3>Faça login e autorize o app <span class="badge bitrix">BITRIX24</span></h3>
+            <p>Na tela do Bitrix24 (login do portal), entre com sua conta e clique em autorizar o app.</p>
+            <p>
+              Se você já estiver logado no Bitrix24 nesse navegador, esse passo acontece automaticamente —
+              o portal não pede login de novo, só redireciona direto (o que pode parecer que a etapa "sumiu").
+              Pra testar o login de verdade, execute esse passo numa <strong>guia anônima</strong> do navegador.
+            </p>
+          </li>
+          <li>
+            <h3>Bitrix24 redireciona de volta com um "code" <span class="badge bitrix">BITRIX24</span></h3>
+            <p>
+              O navegador é redirecionado (sempre via <code class="inline">GET</code>, feito pelo próprio
+              navegador) para o seu redirect_uri, com <code class="inline">code</code>,
+              <code class="inline">domain</code> e <code class="inline">member_id</code> na query string:
+            </p>
+            <div class="urlbox"><code><span class="url-api">https://<span class="placeholder">sua-url-publica</span>/oauth/callback?code=<span class="placeholder">XXXXXXXX</span>&domain=<span class="placeholder">seu-portal</span>.bitrix24.com.br&member_id=<span class="placeholder">...</span></span></code></div>
+          </li>
+          <li>
+            <h3>Servidor troca o code por tokens <span class="badge api">SUA API</span> → <span class="badge bitrix">BITRIX24</span></h3>
+            <p>
+              A rota <code class="inline">GET /oauth/callback</code> deste projeto recebe o <code class="inline">code</code> e
+              chama, internamente (server-to-server), o endpoint real de token do Bitrix24:
+            </p>
+            <div class="urlbox">
+              <code>
+                <span class="url-bitrix">https://oauth.bitrix.info/oauth/token/</span>?grant_type=authorization_code&client_id=<span class="placeholder">SEU_CLIENT_ID</span>&client_secret=<span class="placeholder">SEU_CLIENT_SECRET</span>&code=<span class="placeholder">XXXXXXXX</span>
+              </code>
+            </div>
+            <p>O Bitrix24 responde em JSON com <code class="inline">access_token</code>, <code class="inline">refresh_token</code>, <code class="inline">expires_in</code>, <code class="inline">domain</code>, <code class="inline">member_id</code>, <code class="inline">scope</code>.</p>
+          </li>
+          <li>
+            <h3>Pronto — tokens na tela <span class="badge api">SUA API</span></h3>
+            <p>A página final mostra tudo que o Bitrix24 devolveu; o console do servidor também loga a resposta completa.</p>
+          </li>
+          <li>
+            <h3>⚠️ Guarde o token — não é permanente</h3>
+            <p>
+              Assim como no fluxo 2, o <code class="inline">access_token</code> expira (normalmente em
+              <code class="inline">expires_in</code> = 3600s). Persista <code class="inline">access_token</code>,
+              <code class="inline">refresh_token</code> e <code class="inline">member_id</code> num banco de dados
+              ou cache associados ao usuário/portal que autorizou, e renove antes de expirar chamando o
+              mesmo endpoint de refresh:
+            </p>
+            <div class="urlbox">
+              <code>
+                <span class="url-bitrix">https://oauth.bitrix.info/oauth/token/</span>?grant_type=refresh_token&client_id=<span class="placeholder">SEU_CLIENT_ID</span>&client_secret=<span class="placeholder">SEU_CLIENT_SECRET</span>&refresh_token=<span class="placeholder">REFRESH_TOKEN_SALVO</span>
+              </code>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <p class="desc">Testando manualmente só a troca de tokens, com um code já obtido (sem passar pelo navegador de novo):</p>
+      <pre>curl -X POST https://<span class="placeholder">sua-url-publica</span>/oauth/callback \
+  -d "code=<span class="placeholder">CODE_RECEBIDO_DO_BITRIX24</span>" \
+  -d "domain=<span class="placeholder">seu-portal</span>.bitrix24.com.br"</pre>
+    </section>
+
+    <!-- ===================== REFERÊNCIA ===================== -->
+    <section id="referencia">
+      <h2>Referência rápida</h2>
+      <div class="card">
+        <table class="ref">
+          <thead>
+            <tr><th>URL</th><th>Origem</th><th>Quando é chamada</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="rota">.../rest/&lt;id&gt;/&lt;chave&gt;/&lt;metodo&gt;.json</td><td><span class="badge bitrix">BITRIX24</span></td><td>Webhook fixo — você chama direto, sem nosso servidor.</td></tr>
+            <tr><td class="rota">POST /install</td><td><span class="badge api">SUA API</span></td><td>Automaticamente pelo Bitrix24, a cada abertura do app dentro do portal.</td></tr>
+            <tr><td class="rota">GET /oauth/authorize</td><td><span class="badge api">SUA API</span></td><td>Manual, aberta por você no navegador — atalho que monta a URL de autorização real.</td></tr>
+            <tr><td class="rota">.../oauth/authorize/?client_id=...</td><td><span class="badge bitrix">BITRIX24</span></td><td>Tela de login/autorização real, pra onde o atalho acima redireciona.</td></tr>
+            <tr><td class="rota">GET /oauth/callback</td><td><span class="badge api">SUA API</span></td><td>Automaticamente, quando o Bitrix24 redireciona o navegador após a autorização (redirect_uri).</td></tr>
+            <tr><td class="rota">POST /oauth/callback</td><td><span class="badge api">SUA API</span></td><td>Manual (curl/Insomnia), pra testar a troca de code por tokens sem navegador.</td></tr>
+            <tr><td class="rota">.../oauth/token/?grant_type=...</td><td><span class="badge bitrix">BITRIX24</span></td><td>Chamada interna do servidor (troca de code e renovação de token).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="page">auth-examples-bitrix24 — guia de referência, não substitui a documentação oficial do Bitrix24.</footer>
+
+</body>
+</html>
