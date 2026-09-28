@@ -1,0 +1,15 @@
+{
+  "name": "auth-examples-bitrix24",
+  "version": "1.0.0",
+  "description": "Demo de autenticacao Bitrix24 (contexto automatico + OAuth2 completo) com Fastify.",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/app.js",
+    "dev": "node --watch --env-file-if-exists=.env src/app.js"
+  },
+  "dependencies": {
+    "fastify": "^5.1.0",
+    "@fastify/formbody": "^8.0.1"
+  }
+}
