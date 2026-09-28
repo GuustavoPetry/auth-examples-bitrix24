@@ -277,17 +277,6 @@ member_id=&lt;id do portal&gt;
 DOMAIN=<span class="placeholder">seu-portal</span>.bitrix24.com.br</pre>
           </li>
           <li>
-            <h3>Receba e visualize os tokens <span class="badge api">SUA API</span></h3>
-            <p>
-              A rota <code class="inline">POST /install</code> deste projeto (<code class="inline">src/app.js</code>) loga
-              tudo no console e devolve um HTML com o que chegou. Pra simular sem o Bitrix24:
-            </p>
-            <pre>curl -X POST https://<span class="placeholder">sua-url-publica</span>/install \
-  -d "AUTH_ID=<span class="placeholder">token_de_teste</span>" \
-  -d "REFRESH_ID=<span class="placeholder">refresh_de_teste</span>" \
-  -d "member_id=<span class="placeholder">abc123</span>"</pre>
-          </li>
-          <li>
             <h3>⚠️ Guarde o token — não confie só no contexto do iframe</h3>
             <p>
               O <code class="inline">AUTH_ID</code> (access token) expira em <code class="inline">AUTH_EXPIRES</code>
