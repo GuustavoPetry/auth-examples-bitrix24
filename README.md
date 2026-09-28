@@ -60,7 +60,7 @@ A forma mais simples de chamar a API REST do Bitrix24: uma URL fixa, com um toke
 Usado quando o app roda **dentro** do Bitrix24 (num iframe). O próprio portal injeta os tokens a cada carregamento, chamando o handler cadastrado com um `POST` — sem tela de login, sem redirecionamento manual.
 
 1. **Suba seu servidor com uma URL pública** `SUA API`
-   O Bitrix24 precisa alcançar seu servidor pela internet. Rode `npm start` (o projeto sobe em `http://localhost:3000`) e exponha a porta com um túnel, por exemplo `ngrok http 3000` ou o Port Forwarding do VS Code.
+   O Bitrix24 precisa alcançar seu servidor pela internet. Rode `npm start` (o projeto sobe em `http://localhost:3000`) e exponha a porta com um túnel, por exemplo `ngrok http 3000` ou o `Port Forwarding do VS Code`.
 
 2. **Cadastre o app local** `BITRIX24`
    No portal: *Desenvolvedores → Outro → Adicionar aplicativo local*. Em **"Caminho de instalação (handler)"**, informe:
@@ -82,17 +82,7 @@ Usado quando o app roda **dentro** do Bitrix24 (num iframe). O próprio portal i
    DOMAIN=seu-portal.bitrix24.com.br
    ```
 
-4. **Receba e visualize os tokens** `SUA API`
-   A rota `POST /install` deste projeto (`src/app.js`) loga tudo no console e devolve um HTML com o que chegou. Pra simular sem o Bitrix24:
-
-   ```
-   curl -X POST https://sua-url-publica/install \
-     -d "AUTH_ID=token_de_teste" \
-     -d "REFRESH_ID=refresh_de_teste" \
-     -d "member_id=abc123"
-   ```
-
-5. **⚠️ Guarde o token — não confie só no contexto do iframe**
+4. **⚠️ Guarde o token — não confie só no contexto do iframe**
    O `AUTH_ID` (access token) expira em `AUTH_EXPIRES` segundos (normalmente 3600 = 1 hora). Ele só chega de novo automaticamente quando o app é reaberto dentro do portal — então, se seu backend precisa chamar a API do Bitrix24 fora desse momento (fila, cron job, webhook assíncrono, processamento em background), você **precisa persistir** `AUTH_ID`, `REFRESH_ID` e `member_id` num banco de dados ou cache (Redis, por exemplo), associados ao `member_id` (identifica o portal de forma única).
 
    Quando o access_token expirar, renove chamando o endpoint real de refresh do Bitrix24:
